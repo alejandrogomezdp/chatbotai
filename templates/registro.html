@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Registro</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/prettier@2.3.2/standalone.js"></script>
+    <script src="./chatstyle.css"></script>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #f8f9fa;
+        }
+        .form-register {
+            width: 100%;
+            max-width: 340px;
+            padding: 15px;
+            margin: auto;
+        }
+        button{
+            margin-top: 1em;
+        }
+    </style>
+</head>
+<body>
+    <form class="form-register text-center" action="/registrar" method="post">
+        <h1 class="h3 mb-3 font-weight-normal">Registro</h1>
+        <label for="username" class="sr-only">Usuario</label>
+        <input type="text" id="username" name="username" class="form-control" placeholder="Usuario" required autofocus>
+        <label for="password" class="sr-only">Contraseña</label>
+        <input type="password" id="password" name="password" class="form-control" placeholder="Contraseña" required>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Registrarse</button>
+    </form>
+</body>
+<script>
+const prettier = require('prettier'); function formatCode(code) { const options = { parser: 'html',
+ Especifica el lenguaje que quieres formatear (HTML, JavaScript, etc.) printWidth: 80,
+  Ajusta la longitud máxima de línea permitida tabWidth: 2,
+   Define el ancho de tabulación useTabs: false, 
+   Utiliza espacios en lugar de tabulaciones 
+   ... otras opciones de formateo };
+    return prettier.format(code, options); } 
+</script>
+</html>
