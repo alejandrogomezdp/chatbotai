@@ -1,28 +1,14 @@
-from flask import Flask, request, render_template, redirect, url_for
+from flask import Flask, request, render_template, jsonify
 import openai
 
 app = Flask(__name__)
 
-openai.api_key = "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"
-
-@app.route('/iniciar-sesion', methods=['GET', 'POST'])
-def iniciar_sesion():
-    if request.method == 'POST':
-        if valid_login(request.form['username'], request.form['password']):
-            return redirect(url_for('chat'))
-        else:
-            return render_template('login.html', error='Usuario o contraseña inválidos')
-    return render_template('login.html')
-
-def valid_login(username, password):
-    # Aquí puedes implementar tu lógica de autenticación
-    return True
+openai.api_key = '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'
 
 @app.route('/chat', methods=['GET', 'POST'])
 def chat():
-    response = None
     if request.method == 'POST':
-        user_input = request.form['message']
+        user_input = request.json['message']
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[
@@ -31,7 +17,22 @@ def chat():
             ]
         )
         response = response.choices[0].message['content']
-    return render_template('chat.html' , response=response)
+        return jsonify({'response': response})
+
+    return render_template('chat.html')
+
+@app.route('/registro', methods=['GET', 'POST'])
+def registro():
+    # Aquí va tu código para el registro de usuarios
+    pass
+
+@app.route('/iniciar-sesion', methods=['GET', 'POST'])
+def iniciar_sesion():
+    # Aquí va tu código para iniciar sesión
+    pass
+
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+

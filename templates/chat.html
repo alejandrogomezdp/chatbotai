@@ -2,50 +2,100 @@
 <html>
 <head>
     <title>Chat</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/prettier@2.3.2/standalone.js"></script>
     <style>
         body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .chat-container {
+            border: 1px solid #ccc;
+            background-color: #fff;
+            margin: 20px 0;
+            padding: 20px;
+            height: 400px;
+            overflow-y: scroll;
+        }
+
+        .chat-message {
+            margin-bottom: 20px;
+        }
+
+        .input-container {
             display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background: #f8f9fa;
+            justify-content: space-between;
+            margin: 20px 0;
         }
-        
-        .form-chat {
-            width: 100%;
-            max-width: 600px;
-            padding: 15px;
-            margin: auto;
+
+        .input-container input {
+            flex-grow: 1;
+            margin-right: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
         }
-        
-        .chat-response {
-            border: 1px solid #ced4da;
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 5px;
-            background-color: #e9ecef;
+
+        .input-container button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
         }
-        
-        button {
-            margin-top: 1em;
-        }
-        
-        .past-messages {
-            margin-bottom: 20px;
+
+        .input-container button:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
 <body>
-    <form class="form-chat text-center" action="/chat" method="post">
-        <h1 class="h3 mb-3 font-weight-normal">Háblame de lo que quieras</h1>
-        {% if response %}
-        <div class="chat-response">{{ response }}</div>
-        {% endif %}
-        <label for="message" class="sr-only">Mensaje</label>
-        <input type="text" id="message" name="message" class="form-control" placeholder="Ingresa tu mensaje" required autofocus>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Enviar</button>
-    </form>
+    <div class="container">
+        <h1>Chat</h1>
+        <div class="chat-container" id="chatContainer">
+            <!-- Los mensajes del chat se añadirán aquí -->
+        </div>
+        <div class="input-container">
+            <input type="text" id="messageInput" placeholder="Escribe un mensaje...">
+            <button id="sendButton">Enviar</button>
+        </div>
+    </div>
+    <script>
+        document.getElementById('sendButton').addEventListener('click', function() {
+            var messageInput = document.getElementById('messageInput');
+            var chatContainer = document.getElementById('chatContainer');
+
+            if (messageInput.value) {
+                var messageElement = document.createElement('p');
+                messageElement.classList.add('chat-message');
+                messageElement.textContent = messageInput.value;
+                chatContainer.appendChild(messageElement);
+
+                fetch('/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: messageInput.value
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    var responseElement = document.createElement('p');
+                    responseElement.classList.add('chat-message', 'chat-response');
+                    responseElement.textContent = data.response;
+                    chatContainer.appendChild(responseElement);
+                });
+
+                messageInput.value = '';
+            }
+        });
+    </script>
 </body>
 </html>
