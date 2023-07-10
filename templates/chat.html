@@ -1,51 +1,157 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-    <title>Chat</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/prettier@2.3.2/standalone.js"></script>
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background: #f8f9fa;
-        }
-        
-        .form-chat {
-            width: 100%;
-            max-width: 600px;
-            padding: 15px;
-            margin: auto;
-        }
-        
-        .chat-response {
-            border: 1px solid #ced4da;
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 5px;
-            background-color: #e9ecef;
-        }
-        
-        button {
-            margin-top: 1em;
-        }
-        
-        .past-messages {
-            margin-bottom: 20px;
-        }
-    </style>
-</head>
-<body>
-    <form class="form-chat text-center" action="/chat" method="post">
-        <h1 class="h3 mb-3 font-weight-normal">Háblame de lo que quieras</h1>
-        {% if response %}
-        <div class="chat-response">{{ response }}</div>
-        {% endif %}
-        <label for="message" class="sr-only">Mensaje</label>
-        <input type="text" id="message" name="message" class="form-control" placeholder="Ingresa tu mensaje" required autofocus>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Enviar</button>
-    </form>
-</body>
+    <head>
+        <title>Chat</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+                background-color: #f5f5f5;
+            }
+
+            .container {
+                max-width: 1000px;
+                margin: 0 auto;
+            }
+
+            .chat-container {
+                border: 1px solid #ccc;
+                background-color: #fff;
+                margin: 20px 0;
+                padding: 20px;
+                height: 500px;
+                overflow-y: scroll;
+            }
+
+            .chat-message {
+                margin-bottom: 20px;
+            }
+
+            .input-container {
+                display: flex;
+                justify-content: space-between;
+                margin: 20px 0;
+            }
+
+            .input-container input {
+                flex-grow: 1;
+                margin-right: 20px;
+                padding: 10px;
+                border: 1px solid #ccc;
+            }
+
+            .input-container button {
+                padding: 10px 20px;
+                border: none;
+                background-color: #007bff;
+                color: #fff;
+                cursor: pointer;
+            }
+
+            .input-container button:hover {
+                background-color: #0056b3;
+            }
+
+            pre {
+                position: relative;
+                background-color: #333;
+                color: #fff;
+                padding: 10px;
+                border-radius: 5px;
+            }
+
+            code {
+                font-family: monospace;
+            }
+
+            p {
+                margin-bottom: 1em;
+            }
+
+            .copy-button {
+                position: absolute;
+                top: 5px;
+                right: 5px;
+                background: none;
+                color: #fff;
+                border: none;
+                cursor: pointer;
+            }
+
+            .command {
+                font-weight: bold;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Chat</h1>
+            <div class="chat-container" id="chatContainer">
+                <!-- Los mensajes del chat se añadirán aquí -->
+            </div>
+            <div class="input-container">
+                <input
+                    type="text"
+                    id="messageInput"
+                    placeholder="Escribe un mensaje..."
+                />
+                <button id="sendButton">Enviar</button>
+            </div>
+        </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-javascript.min.js"></script>
+    <script>
+        document.getElementById('sendButton').addEventListener('click', function() {
+            var messageInput = document.getElementById('messageInput');
+            var chatContainer = document.getElementById('chatContainer');
+
+            if (messageInput.value) {
+                var messageElement = document.createElement('p');
+                messageElement.classList.add('chat-message');
+                messageElement.textContent = messageInput.value;
+                chatContainer.appendChild(messageElement);
+
+                fetch('/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: messageInput.value
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    var responseElement = document.createElement('div');
+                    responseElement.classList.add('chat-message', 'chat-response');
+
+                    // Divide la respuesta en párrafos
+                    var paragraphs = data.response.split('\n');
+                    paragraphs.forEach(function(paragraph) {
+                        var p = document.createElement('p');
+
+                        // Comprueba si el párrafo es un bloque de código
+                        if (paragraph.startsWith('```') && paragraph.endsWith('```')) {
+                            var pre = document.createElement('pre');
+                            var code = document.createElement('code');
+                            code.innerHTML = Prism.highlight(paragraph.slice(3, -3), Prism.languages.javascript, 'javascript');
+                            pre.appendChild(code);
+                            responseElement.appendChild(pre);
+                        } else {
+                            p.textContent = paragraph;
+                            responseElement.appendChild(p);
+                        }
+                    });
+
+                    chatContainer.appendChild(responseElement);
+                });
+
+                messageInput.value = '';
+            }
+        });
+    </script>
+    </body>
 </html>
