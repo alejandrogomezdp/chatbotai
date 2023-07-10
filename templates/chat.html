@@ -1,5 +1,5 @@
-<!doctype html>
-<html>
+    <!DOCTYPE html>
+    <html>
     <head>
         <title>Chat</title>
         <style>
@@ -11,7 +11,8 @@
             }
 
             .container {
-                max-width: 1000px;
+                min-width: 1em;
+                max-width: 80em;
                 margin: 0 auto;
             }
 
@@ -20,7 +21,7 @@
                 background-color: #fff;
                 margin: 20px 0;
                 padding: 20px;
-                height: 500px;
+                height: 400px;
                 overflow-y: scroll;
             }
 
@@ -82,76 +83,101 @@
             .command {
                 font-weight: bold;
             }
+            h1 {
+                text-align: center;
+                font-family: Arial, Helvetica, sans-serif;
+                font-size: 3em;
+                margin: 0;
+                padding: 20px 0;
+                font-weight: 300;
+            }
         </style>
     </head>
     <body>
         <div class="container">
-            <h1>Chat</h1>
+            <h1>Inteligencia Artificial a Tus Manos</h1>
             <div class="chat-container" id="chatContainer">
                 <!-- Los mensajes del chat se añadirán aquí -->
             </div>
             <div class="input-container">
-                <input
-                    type="text"
-                    id="messageInput"
-                    placeholder="Escribe un mensaje..."
-                />
+                <input type="text" id="messageInput" placeholder="Escribe un mensaje..." oninput="resizeInput(this)" onKeyDown="sendMessage(event)">
                 <button id="sendButton">Enviar</button>
             </div>
         </div>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-tomorrow.min.css" rel="stylesheet" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-python.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-javascript.min.js"></script>
-    <script>
-        document.getElementById('sendButton').addEventListener('click', function() {
-            var messageInput = document.getElementById('messageInput');
-            var chatContainer = document.getElementById('chatContainer');
+        <script>
+            function resizeInput(input) {
+                input.style.height = 'auto';
+                input.style.height = input.scrollHeight + 'px';
+            }
 
-            if (messageInput.value) {
-                var messageElement = document.createElement('p');
-                messageElement.classList.add('chat-message');
-                messageElement.textContent = messageInput.value;
-                chatContainer.appendChild(messageElement);
+            function sendMessage(event) {
+                if (event.keyCode === 13) { // Si se presiona Enter
+                    event.preventDefault(); // Evita que se inserte una nueva línea en el input
+                    var messageInput = document.getElementById('messageInput');
+                    var message = messageInput.value;
 
-                fetch('/chat', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        message: messageInput.value
+                    // Envía el mensaje al servidor o realiza alguna otra acción
+                    fetch('/chat', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            message: message
+                        })
                     })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    var responseElement = document.createElement('div');
-                    responseElement.classList.add('chat-message', 'chat-response');
+                    .then(response => response.json())
+                    .then(data => {
+                        var responseElement = document.createElement('div');
+                        responseElement.classList.add('chat-message', 'chat-response');
 
-                    // Divide la respuesta en párrafos
-                    var paragraphs = data.response.split('\n');
-                    paragraphs.forEach(function(paragraph) {
-                        var p = document.createElement('p');
+                        // Divide la respuesta en párrafos
+                        var paragraphs = data.response.split('\n');
+                        paragraphs.forEach(function(paragraph) {
+                            var p = document.createElement('p');
 
-                        // Comprueba si el párrafo es un bloque de código
-                        if (paragraph.startsWith('```') && paragraph.endsWith('```')) {
-                            var pre = document.createElement('pre');
-                            var code = document.createElement('code');
-                            code.innerHTML = Prism.highlight(paragraph.slice(3, -3), Prism.languages.javascript, 'javascript');
-                            pre.appendChild(code);
-                            responseElement.appendChild(pre);
-                        } else {
-                            p.textContent = paragraph;
-                            responseElement.appendChild(p);
-                        }
+                            // Comprueba si el párrafo es un bloque de código
+                            if (paragraph.startsWith('```') && paragraph.endsWith('```')) {
+                                var pre = document.createElement('pre');
+                                var code = document.createElement('code');
+                                code.textContent = paragraph.slice(3, -3);  // Elimina las comillas triples
+
+                                var copyButton = document.createElement('button');
+                                copyButton.classList.add('copy-button');
+                                copyButton.textContent = 'Copiar';
+                                copyButton.addEventListener('click', function() {
+                                    navigator.clipboard.writeText(code.textContent);
+                                });
+
+                                pre.appendChild(code);
+                                pre.appendChild(copyButton);
+                                responseElement.appendChild(pre);
+                            } else {
+                                // Formatea los comandos envueltos en comillas simples
+                                var parts = paragraph.split(/'([^']*)'/g);
+                                for (var i = 0; i < parts.length; i++) {
+                                    if (i % 2 === 0) {
+                                        p.appendChild(document.createTextNode(parts[i]));
+                                    } else {
+                                        var command = document.createElement('span');
+                                        command.classList.add('command');
+                                        command.textContent = parts[i];
+                                        p.appendChild(command);
+                                    }
+                                }
+                                responseElement.appendChild(p);
+                            }
+                        });
+
+                        var chatContainer = document.getElementById('chatContainer');
+                        chatContainer.appendChild(responseElement);
+                        chatContainer.scrollTop = chatContainer.scrollHeight; // Desplaza automáticamente al último mensaje
                     });
 
-                    chatContainer.appendChild(responseElement);
-                });
-
-                messageInput.value = '';
+                    messageInput.value = '';
+                    resizeInput(messageInput); // Ajusta el tamaño del input después de limpiarlo
+                }
             }
-        });
-    </script>
+        </script>
     </body>
-</html>
+    </html>

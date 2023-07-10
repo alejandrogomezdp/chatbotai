@@ -1,0 +1,54 @@
+{
+    "users": [
+        {
+            "id": 1,
+            "username": "alejandrogomezai",
+            "password": "eminem92AA!!"
+        },
+        {
+            "id": 2,
+            "username": "usuario2",
+            "password": "contrase\u00f1a2"
+        }
+    ],
+    "conversations": [
+        {
+            "id": 1,
+            "user_input": "Hola, tengo una pregunta sobre Python",
+            "chatbot_response": "\u00a1Por supuesto! Estoy aqu\u00ed para ayudarte. \u00bfCu\u00e1l es tu pregunta sobre Python?"
+        },
+        {
+            "id": 2,
+            "user_input": "\u00bfC\u00f3mo instalo bibliotecas en Python?",
+            "chatbot_response": "Puedes instalar bibliotecas en Python usando el comando pip. Por ejemplo, para instalar la biblioteca requests, ejecutar\u00edas `pip install requests` en tu terminal."
+        },
+        {
+            "user_input": "hola?",
+            "chatbot_response": "\u00a1Hola! \u00bfEn qu\u00e9 puedo ayudarte hoy?"
+        },
+        {
+            "user_input": "dame un c\u00f3digo en python",
+            "chatbot_response": "Por supuesto, aqu\u00ed tienes un ejemplo de c\u00f3digo en Python:<p><pre><code>python\n# Calculadora simple<p>def suma(a, b):\n    return a + b<p>def resta(a, b):\n    return a - b<p>def multiplicacion(a, b):\n    return a * b<p>def division(a, b):\n    if b != 0:\n        return a / b\n    else:\n        return \"Error: divisi\u00f3n entre cero no permitida\"<p># Ejemplo de uso de la calculadora\nnum1 = float(input(\"Ingrese el primer n\u00famero: \"))\nnum2 = float(input(\"Ingrese el segundo n\u00famero: \"))<p>print(\"Suma:\", suma(num1, num2))\nprint(\"Resta:\", resta(num1, num2))\nprint(\"Multiplicaci\u00f3n:\", multiplicacion(num1, num2))\nprint(\"Divisi\u00f3n:\", division(num1, num2))\n</code></pre><p>Este c\u00f3digo es una calculadora simple en Python que permite realizar operaciones b\u00e1sicas como suma, resta, multiplicaci\u00f3n y divisi\u00f3n. Simplemente ingresa los dos n\u00fameros y el programa mostrar\u00e1 los resultados de las operaciones."
+        },
+        {
+            "user_input": "quien soy",
+            "chatbot_response": "No tengo informaci\u00f3n personal tuya, as\u00ed que no puedo saber qui\u00e9n eres. Soy solo un asistente virtual aqu\u00ed para ayudarte con cualquier pregunta o tarea que tengas. \u00bfEn qu\u00e9 puedo ayudarte hoy?"
+        },
+        {
+            "user_input": "hola que tal?",
+            "chatbot_response": "\u00a1Hola! \u00bfC\u00f3mo puedo ayudarte con tu problema de codificaci\u00f3n hoy?"
+        },
+        {
+            "user_input": "tengo hambre",
+            "chatbot_response": "\u00a1Hola! Entiendo que tengas hambre, pero estoy aqu\u00ed para ayudarte con un problema de codificaci\u00f3n. \u00bfEn qu\u00e9 puedo ayudarte?"
+        },
+        {
+            "user_input": "en que se distingue python de javascript",
+            "chatbot_response": "Python y JavaScript son dos lenguajes de programaci\u00f3n ampliamente utilizados, pero tienen algunas diferencias clave:<p>1. Sintaxis: La sintaxis de Python se caracteriza por su legibilidad y su enfoque en la escritura clara y concisa del c\u00f3digo. Por otro lado, la sintaxis de JavaScript puede ser m\u00e1s flexible y puede requerir el uso de puntos y comas para terminar las declaraciones.<p>2. Tipado: Python es un lenguaje de programaci\u00f3n de tipado din\u00e1mico, lo que significa que las variables no tienen un tipo de dato definido y pueden cambiar durante la ejecuci\u00f3n del programa. JavaScript, por otro lado, es un lenguaje de tipado din\u00e1mico que permite la manipulaci\u00f3n flexible de tipos de datos.<p>3. Uso: Python es ampliamente utilizado en campos como la ciencia de datos, el aprendizaje autom\u00e1tico y el desarrollo web, gracias a su amplia biblioteca de m\u00f3dulos y su facilidad de uso. JavaScript es ampliamente utilizado para el desarrollo web del lado del cliente y del lado del servidor, y tambi\u00e9n se utiliza para crear aplicaciones de escritorio y m\u00f3viles.<p>4. Enfoque: Python es conocido por su facilidad de uso y su \u00e9nfasis en la legibilidad del c\u00f3digo. Est\u00e1 dise\u00f1ado para fomentar una programaci\u00f3n m\u00e1s estructurada y modular. Por otro lado, JavaScript es un lenguaje m\u00e1s flexible y puede ser utilizado para una variedad de enfoques de programaci\u00f3n, como programaci\u00f3n orientada a objetos o programaci\u00f3n funcional.<p>En resumen, Python se enfoca en la simplicidad y la legibilidad, mientras que JavaScript es m\u00e1s flexible y se utiliza ampliamente para el desarrollo web. Ambos lenguajes tienen sus fortalezas y debilidades, y la elecci\u00f3n entre ellos generalmente se basa en el proyecto o tarea espec\u00edfica que se est\u00e1 desarrollando."
+        },
+        {
+            "user_input": "dame el c\u00f3digo html de una web",
+            "chatbot_response": "Aqu\u00ed tienes un ejemplo b\u00e1sico de un c\u00f3digo HTML para crear una p\u00e1gina web:<p><pre><code>html\n<!DOCTYPE html>\n<html>\n<head>\n    <title>T\u00edtulo de la p\u00e1gina</title>\n</head>\n<body>\n    <header>\n        <h1>T\u00edtulo principal</h1>\n    </header><p>    <nav>\n        <ul>\n            <li><a href=\"#\">Enlace 1</a></li>\n            <li><a href=\"#\">Enlace 2</a></li>\n            <li><a href=\"#\">Enlace 3</a></li>\n        </ul>\n    </nav><p>    <section>\n        <h2>Secci\u00f3n 1</h2>\n        <p>Contenido de la secci\u00f3n 1.</p>\n    </section><p>    <section>\n        <h2>Secci\u00f3n 2</h2>\n        <p>Contenido de la secci\u00f3n 2.</p>\n    </section><p>    <footer>\n        <p>Pie de p\u00e1gina</p>\n    </footer>\n</body>\n</html>\n</code></pre><p>Eso es solo un c\u00f3digo de ejemplo y puedes personalizarlo seg\u00fan tus necesidades. Recuerda que la estructura b\u00e1sica de un documento HTML consta de las etiquetas `<html>`, `<head>` y `<body>`. Dentro de `<head>` puedes agregar metadatos y enlaces a archivos CSS o JavaScript. En el `<body>` se encuentra el contenido visible de la p\u00e1gina, que se organiza en diferentes elementos como encabezados, secciones, enlaces, etc.<p>Ten en cuenta que este c\u00f3digo solo es una plantilla b\u00e1sica, y hay muchas posibilidades y elementos adicionales que puedes agregar a una p\u00e1gina web seg\u00fan tus necesidades."
+        }
+    ]
+}
