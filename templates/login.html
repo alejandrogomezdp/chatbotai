@@ -1,36 +1,60 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-    <title>Login</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background: #f8f9fa;
-        }
-        .form-signin {
-            width: 100%;
-            max-width: 340px;
-            padding: 15px;
-            margin: auto;
-        }
-        button{
-            margin-top: 1em;
-        }
-    </style>
-</head>
-<body>
-    <form class="form-signin text-center" action="/iniciar-sesion" method="post">
-        <h1 class="h3 mb-3 font-weight-normal">Iniciar sesión</h1>
-        <label for="username" class="sr-only">Usuario</label>
-        <input type="text" id="username" name="username" class="form-control" placeholder="Usuario" required autofocus>
-        <label for="password" class="sr-only">Contraseña</label>
-        <input type="password" id="password" name="password" class="form-control" placeholder="Contraseña" required>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Iniciar sesión</button>
-        <a href="/registro">Registrarse</a>
-    </form>
-</body>
+    <head>
+        <title>Login</title>
+        <link
+            href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+            rel="stylesheet"
+        />
+        <style>
+            body {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                background: #f8f9fa;
+            }
+            .form-signin {
+                width: 100%;
+                max-width: 340px;
+                padding: 15px;
+                margin: auto;
+            }
+            button {
+                margin-top: 1em;
+            }
+        </style>
+    </head>
+    <body>
+        <form
+            class="form-signin text-center"
+            action="/iniciar-sesion"
+            method="post"
+        >
+            <h1 class="h3 mb-3 font-weight-normal">Iniciar sesión</h1>
+            <label for="username" class="sr-only">Usuario</label>
+            <input
+                type="text"
+                id="username"
+                name="username"
+                class="form-control"
+                placeholder="Usuario"
+                required
+                autofocus
+            />
+            <label for="password" class="sr-only">Contraseña</label>
+            <input
+                type="password"
+                id="password"
+                name="password"
+                class="form-control"
+                placeholder="Contraseña"
+                required
+            />
+            <button class="btn btn-lg btn-primary btn-block" type="submit">
+                Iniciar sesión
+            </button>
+            <a href="/registro">Registrarse</a>
+        </form>
+    </body>
 </html>

@@ -1,70 +1,108 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-    <title>Chat</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f5f5f5;
-        }
+    <head>
+        <title>Chat</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+                background-color: #f5f5f5;
+            }
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
+            .container {
+                max-width: 1000px;
+                margin: 0 auto;
+            }
 
-        .chat-container {
-            border: 1px solid #ccc;
-            background-color: #fff;
-            margin: 20px 0;
-            padding: 20px;
-            height: 400px;
-            overflow-y: scroll;
-        }
+            .chat-container {
+                border: 1px solid #ccc;
+                background-color: #fff;
+                margin: 20px 0;
+                padding: 20px;
+                height: 500px;
+                overflow-y: scroll;
+            }
 
-        .chat-message {
-            margin-bottom: 20px;
-        }
+            .chat-message {
+                margin-bottom: 20px;
+            }
 
-        .input-container {
-            display: flex;
-            justify-content: space-between;
-            margin: 20px 0;
-        }
+            .input-container {
+                display: flex;
+                justify-content: space-between;
+                margin: 20px 0;
+            }
 
-        .input-container input {
-            flex-grow: 1;
-            margin-right: 20px;
-            padding: 10px;
-            border: 1px solid #ccc;
-        }
+            .input-container input {
+                flex-grow: 1;
+                margin-right: 20px;
+                padding: 10px;
+                border: 1px solid #ccc;
+            }
 
-        .input-container button {
-            padding: 10px 20px;
-            border: none;
-            background-color: #007bff;
-            color: #fff;
-            cursor: pointer;
-        }
+            .input-container button {
+                padding: 10px 20px;
+                border: none;
+                background-color: #007bff;
+                color: #fff;
+                cursor: pointer;
+            }
 
-        .input-container button:hover {
-            background-color: #0056b3;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Chat</h1>
-        <div class="chat-container" id="chatContainer">
-            <!-- Los mensajes del chat se añadirán aquí -->
+            .input-container button:hover {
+                background-color: #0056b3;
+            }
+
+            pre {
+                position: relative;
+                background-color: #333;
+                color: #fff;
+                padding: 10px;
+                border-radius: 5px;
+            }
+
+            code {
+                font-family: monospace;
+            }
+
+            p {
+                margin-bottom: 1em;
+            }
+
+            .copy-button {
+                position: absolute;
+                top: 5px;
+                right: 5px;
+                background: none;
+                color: #fff;
+                border: none;
+                cursor: pointer;
+            }
+
+            .command {
+                font-weight: bold;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Chat</h1>
+            <div class="chat-container" id="chatContainer">
+                <!-- Los mensajes del chat se añadirán aquí -->
+            </div>
+            <div class="input-container">
+                <input
+                    type="text"
+                    id="messageInput"
+                    placeholder="Escribe un mensaje..."
+                />
+                <button id="sendButton">Enviar</button>
+            </div>
         </div>
-        <div class="input-container">
-            <input type="text" id="messageInput" placeholder="Escribe un mensaje...">
-            <button id="sendButton">Enviar</button>
-        </div>
-    </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-javascript.min.js"></script>
     <script>
         document.getElementById('sendButton').addEventListener('click', function() {
             var messageInput = document.getElementById('messageInput');
@@ -87,9 +125,27 @@
                 })
                 .then(response => response.json())
                 .then(data => {
-                    var responseElement = document.createElement('p');
+                    var responseElement = document.createElement('div');
                     responseElement.classList.add('chat-message', 'chat-response');
-                    responseElement.textContent = data.response;
+
+                    // Divide la respuesta en párrafos
+                    var paragraphs = data.response.split('\n');
+                    paragraphs.forEach(function(paragraph) {
+                        var p = document.createElement('p');
+
+                        // Comprueba si el párrafo es un bloque de código
+                        if (paragraph.startsWith('```') && paragraph.endsWith('```')) {
+                            var pre = document.createElement('pre');
+                            var code = document.createElement('code');
+                            code.innerHTML = Prism.highlight(paragraph.slice(3, -3), Prism.languages.javascript, 'javascript');
+                            pre.appendChild(code);
+                            responseElement.appendChild(pre);
+                        } else {
+                            p.textContent = paragraph;
+                            responseElement.appendChild(p);
+                        }
+                    });
+
                     chatContainer.appendChild(responseElement);
                 });
 
@@ -97,5 +153,5 @@
             }
         });
     </script>
-</body>
+    </body>
 </html>
