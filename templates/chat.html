@@ -2,7 +2,7 @@
 <html>
     <head>
         <title>Chat</title>
-        <style src="./chatstyle.css">
+        <style>
             body {
                 font-family: Arial, sans-serif;
                 margin: 0;
@@ -11,17 +11,57 @@
             }
 
             .container {
-                min-width: 1em;
-                max-width: 80em;
+                display: flex;
+                max-width: 1666px;
                 margin: 0 auto;
+                padding: 20px;
+            }
+
+            .sidebar {
+                width: 15%;
+                padding-right: 20px;
+                border-right: 1px solid #ccc;
+            }
+
+            .sidebar-tabs {
+                list-style-type: none;
+                padding: 0;
+                margin: 0;
+            }
+
+            .sidebar-tab {
+                margin-bottom: 10px;
+                position: float;
+                align-items: left;
+            }
+
+            .sidebar-tab .sidebar-tab-link {
+                display: flex;
+                align-items: center;
+                text-decoration: none;
+                color: #000;
+            }
+
+            .sidebar-tab .sidebar-tab-link:hover {
+                color: #007bff;
+            }
+
+            .sidebar-tab .sidebar-tab-link .sidebar-tab-icon {
+                margin-right: 5px;
+            }
+
+            .sidebar-tab .sidebar-tab-link.active {
+                font-weight: bold;
             }
 
             .chat-container {
+                flex-grow: 1;
                 border: 1px solid #ccc;
                 background-color: #fff;
-                margin: 20px 0;
+                margin-left: 20px;
                 padding: 20px;
-                height: 400px;
+                min-width: 1200px;
+                height: 30%;
                 overflow-y: scroll;
             }
 
@@ -31,8 +71,8 @@
 
             .input-container {
                 display: flex;
-                justify-content: space-between;
-                margin: 20px 0;
+                justify-content: di;
+                margin-top: 20px;
             }
 
             .input-container input {
@@ -55,89 +95,77 @@
             }
 
             .alert-danger {
-                margin: auto;
-                align-items: center;                       
+                margin-top: 20px;
+                text-align: center;
             }
-            .sidebar-tab {
-    margin-bottom: 10px;
-}
 
-.sidebar-tab .sidebar-tab-link {
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    color: #000;
-}
-
-.sidebar-tab .sidebar-tab-link:hover {
-    color: #007bff;
-}
-
-.sidebar-tab .sidebar-tab-link .sidebar-tab-icon {
-    margin-right: 5px;
-}
-
-.sidebar-tab .sidebar-tab-link.active {
-    font-weight: bold;
-}
+            textarea {
+                margin: auto;
+                width: 100%;
+            }
         </style>
     </head>
-    <ul class="sidebar-tabs">
-        <li class="sidebar-tab">
-            <a href="#" class="sidebar-tab-link active">
-                <span class="sidebar-tab-icon">+</span> Nuevo Chat
-            </a>
-        </li>
-        {% for conversation in conversations %}
-            <li class="sidebar-tab">
-                <a href="{{ url_for('chat', conversation_id=conversation.id) }}" class="sidebar-tab-link">
-                    {{ conversation.user_input[:20] }}...
-                </a>
-            </li>
-        {% endfor %}
-    </ul>
     <body>
         <div class="container">
-            <h1>Chat</h1>
-            {% with messages = get_flashed_messages(with_categories=false) %}
-                {% if messages %}
-                    {% for message in messages %}
-                        <div class="alert">
-                            {{ message }}
-                        </div>
+            <div class="sidebar">
+                <ul class="sidebar-tabs">
+                    <li class="sidebar-tab">
+                        <a href="#" class="sidebar-tab-link active">
+                            <span class="sidebar-tab-icon">+</span> Nuevo Chat
+                        </a>
+                    </li>
+                    {% for conversation in conversations %}
+                    <li class="sidebar-tab">
+                        <a
+                            href="{{ url_for('chat', conversation_id=conversation.id) }}"
+                            class="sidebar-tab-link"
+                        >
+                            {{ conversation.user_input[:20] }}...
+                        </a>
+                    </li>
                     {% endfor %}
-                {% endif %}
-            {% endwith %}
+                </ul>
+            </div>
             <div class="chat-container">
                 {% for conversation in conversations %}
-                    <div class="chat-message">
-                        <p><strong>User:</strong> {{ conversation.user_input }}</p>
-                        <p><strong>Chatbot:</strong> {{ conversation.chatbot_response }}</p>
-                    </div>
+                <div class="chat-message">
+                    <p><strong>User:</strong> {{ conversation.user_input }}</p>
+                    <p>
+                        <strong>Chatbot:</strong> {{
+                        conversation.chatbot_response }}
+                    </p>
+                </div>
                 {% endfor %}
             </div>
-            <div class="input-container">
-                <input type="text" id="messageInput" placeholder="Escribe un mensaje...">
-                <button id="sendButton">Enviar</button>
-            </div>
+        </div>
+        <div class="input-container">
+            <textarea
+                id="messageInput"
+                rows="3"
+                placeholder="Escribe un mensaje..."
+                oninput="resizeInput(this)"
+                onKeyDown="sendMessage(event)"
+            ></textarea>
+            <button id="sendButton">Enviar</button>
         </div>
 
         <script>
             function scrollToBottom() {
-                const chatContainer = document.querySelector('.chat-container');
-                chatContainer.scrollTop = chatContainer.scrollHeight;
+                const chatContainer = document.querySelector('.chat-container')
+                chatContainer.scrollTop = chatContainer.scrollHeight
             }
 
             function addMessageToChat(role, content) {
-                const chatContainer = document.querySelector('.chat-container');
-                const messageDiv = document.createElement('div');
-                messageDiv.className = 'chat-message';
-                const roleTag = document.createElement('strong');
-                roleTag.textContent = role.charAt(0).toUpperCase() + role.slice(1);
-                const messageContent = document.createElement('p');
-                messageContent.innerHTML = `<strong>${roleTag.textContent}:</strong> ${content}`;
-                messageDiv.appendChild(messageContent);
-                chatContainer.appendChild(messageDiv);
+                const chatContainer = document.querySelector('.chat-container')
+                const messageDiv = document.createElement('div')
+                messageDiv.className = 'chat-message'
+                const roleTag = document.createElement('strong')
+                roleTag.textContent =
+                    role.charAt(0).toUpperCase() + role.slice(1)
+                const messageContent = document.createElement('p')
+                messageContent.innerHTML = `<strong>${roleTag.textContent}:</strong> ${content}`
+                messageDiv.appendChild(messageContent)
+                chatContainer.appendChild(messageDiv)
             }
 
             function postUserMessage(message) {
@@ -150,33 +178,56 @@
                         message: message,
                     }),
                 })
-                .then(response => response.json())
-                .then(data => {
-                    addMessageToChat('chatbot', data.response);
-                    scrollToBottom();
-                })
-                .catch(error => console.error(error));
+                    .then((response) => response.json())
+                    .then((data) => {
+                        addMessageToChat('chatbot', data.response)
+                        scrollToBottom()
+                    })
+                    .catch((error) => console.error(error))
             }
 
-            document.getElementById('sendButton').addEventListener('click', function() {
-                const messageInput = document.getElementById('messageInput');
-                const message = messageInput.value.trim();
-                if (message !== '') {
-                    addMessageToChat('user', message);
-                    messageInput.value = '';
-                    scrollToBottom();
-                    postUserMessage(message);
-                }
-            });
+            document
+                .querySelector('.sidebar-tab-link.active')
+                .addEventListener('click', function (event) {
+                    event.preventDefault()
+                    addMessageToChat('user', 'Nuevo Chat')
+                    postUserMessage('Nuevo Chat')
+                })
 
-            document.getElementById('messageInput').addEventListener('keydown', function(event) {
-                if (event.keyCode === 13) {
-                    event.preventDefault();
-                    document.getElementById('sendButton').click();
-                }
-            });
+            document
+                .getElementById('sendButton')
+                .addEventListener('click', function () {
+                    const messageInput = document.getElementById('messageInput')
+                    const message = messageInput.value.trim()
+                    if (message !== '') {
+                        addMessageToChat('user', message)
+                        messageInput.value = ''
+                        scrollToBottom()
+                        postUserMessage(message)
+                    }
+                })
 
-            scrollToBottom();
+            document
+                .getElementById('messageInput')
+                .addEventListener('keydown', function (event) {
+                    if (event.keyCode === 13 && !event.shiftKey) {
+                        event.preventDefault()
+                        document.getElementById('sendButton').click()
+                    }
+                })
+
+            scrollToBottom()
+
+            document
+                .querySelector('.sidebar-tab-link.active')
+                .addEventListener('click', function (event) {
+                    event.preventDefault()
+                    const chatContainer =
+                        document.querySelector('.chat-container')
+                    chatContainer.innerHTML = '' // Clear the chat container
+                    addMessageToChat('user', 'Nuevo Chat')
+                    postUserMessage('Nuevo Chat')
+                })
         </script>
     </body>
 </html>
