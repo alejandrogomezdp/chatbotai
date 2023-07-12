@@ -2,7 +2,7 @@
 <html>
     <head>
         <title>Chat</title>
-        <style>
+        <style src="./chatstyle.css">
             body {
                 font-family: Arial, sans-serif;
                 margin: 0;
@@ -56,10 +56,46 @@
 
             .alert-danger {
                 margin: auto;
-                align-items: center;                           
+                align-items: center;                       
             }
+            .sidebar-tab {
+    margin-bottom: 10px;
+}
+
+.sidebar-tab .sidebar-tab-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #000;
+}
+
+.sidebar-tab .sidebar-tab-link:hover {
+    color: #007bff;
+}
+
+.sidebar-tab .sidebar-tab-link .sidebar-tab-icon {
+    margin-right: 5px;
+}
+
+.sidebar-tab .sidebar-tab-link.active {
+    font-weight: bold;
+}
         </style>
     </head>
+    <ul class="sidebar-tabs">
+        <li class="sidebar-tab">
+            <a href="#" class="sidebar-tab-link active">
+                <span class="sidebar-tab-icon">+</span> Nuevo Chat
+            </a>
+        </li>
+        {% for conversation in conversations %}
+            <li class="sidebar-tab">
+                <a href="{{ url_for('chat', conversation_id=conversation.id) }}" class="sidebar-tab-link">
+                    {{ conversation.user_input[:20] }}...
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
     <body>
         <div class="container">
             <h1>Chat</h1>
