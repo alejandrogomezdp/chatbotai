@@ -20,49 +20,57 @@
                 padding: 15px;
                 margin: auto;
             }
+            .alert-container {
+                margin-bottom: 1em;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+            }
             button {
                 margin-top: 1em;
             }
         </style>
     </head>
     <body>
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category }}">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
-        <form
-            class="form-signin text-center"
-            action="/login"
-            method="post"
-        >
+        <div class="form-signin text-center">
             <h1 class="h3 mb-3 font-weight-normal">Iniciar sesión</h1>
-            <label for="username" class="sr-only">Usuario</label>
-            <input
-                type="text"
-                id="username"
-                name="username"
-                class="form-control"
-                placeholder="Usuario"
-                required
-            />
-            <label for="password" class="sr-only">Contraseña</label>
-            <input
-                type="password"
-                id="password"
-                name="password"
-                class="form-control"
-                placeholder="Contraseña"
-                required
-            />
-            <button class="btn btn-lg btn-primary btn-block" type="submit">
-                Iniciar sesión
-            </button>
+            <div class="alert-container">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }} text-center">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+            </div>
+            <form action="/login" method="post">
+                <label for="username" class="sr-only">Usuario</label>
+                <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    class="form-control"
+                    placeholder="Usuario"
+                    required
+                    autofocus
+                />
+                <label for="password" class="sr-only">Contraseña</label>
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    class="form-control"
+                    placeholder="Contraseña"
+                    required
+                />
+                <button class="btn btn-lg btn-primary btn-block" type="submit">
+                    Iniciar sesión
+                </button>
+            </form>
             <a href="/register">Registrarse</a>
-        </form>
+        </div>
     </body>
 </html>
