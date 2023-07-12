@@ -49,6 +49,14 @@
         {
             "user_input": "dame el c\u00f3digo html de una web",
             "chatbot_response": "Aqu\u00ed tienes un ejemplo b\u00e1sico de un c\u00f3digo HTML para crear una p\u00e1gina web:<p><pre><code>html\n<!DOCTYPE html>\n<html>\n<head>\n    <title>T\u00edtulo de la p\u00e1gina</title>\n</head>\n<body>\n    <header>\n        <h1>T\u00edtulo principal</h1>\n    </header><p>    <nav>\n        <ul>\n            <li><a href=\"#\">Enlace 1</a></li>\n            <li><a href=\"#\">Enlace 2</a></li>\n            <li><a href=\"#\">Enlace 3</a></li>\n        </ul>\n    </nav><p>    <section>\n        <h2>Secci\u00f3n 1</h2>\n        <p>Contenido de la secci\u00f3n 1.</p>\n    </section><p>    <section>\n        <h2>Secci\u00f3n 2</h2>\n        <p>Contenido de la secci\u00f3n 2.</p>\n    </section><p>    <footer>\n        <p>Pie de p\u00e1gina</p>\n    </footer>\n</body>\n</html>\n</code></pre><p>Eso es solo un c\u00f3digo de ejemplo y puedes personalizarlo seg\u00fan tus necesidades. Recuerda que la estructura b\u00e1sica de un documento HTML consta de las etiquetas `<html>`, `<head>` y `<body>`. Dentro de `<head>` puedes agregar metadatos y enlaces a archivos CSS o JavaScript. En el `<body>` se encuentra el contenido visible de la p\u00e1gina, que se organiza en diferentes elementos como encabezados, secciones, enlaces, etc.<p>Ten en cuenta que este c\u00f3digo solo es una plantilla b\u00e1sica, y hay muchas posibilidades y elementos adicionales que puedes agregar a una p\u00e1gina web seg\u00fan tus necesidades."
+        },
+        {
+            "user_input": "hola que tal",
+            "chatbot_response": "Hola, \u00bfc\u00f3mo puedo ayudarte hoy?"
+        },
+        {
+            "user_input": "hola que tal?",
+            "chatbot_response": "Hola, \u00a1bienvenido! \u00bfEn qu\u00e9 puedo ayudarte hoy?"
         }
     ]
 }

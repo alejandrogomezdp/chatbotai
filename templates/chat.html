@@ -1,5 +1,5 @@
-    <!DOCTYPE html>
-    <html>
+<!doctype html>
+<html>
     <head>
         <title>Chat</title>
         <style>
@@ -54,130 +54,93 @@
                 background-color: #0056b3;
             }
 
-            pre {
-                position: relative;
-                background-color: #333;
-                color: #fff;
-                padding: 10px;
-                border-radius: 5px;
-            }
-
-            code {
-                font-family: monospace;
-            }
-
-            p {
-                margin-bottom: 1em;
-            }
-
-            .copy-button {
-                position: absolute;
-                top: 5px;
-                right: 5px;
-                background: none;
-                color: #fff;
-                border: none;
-                cursor: pointer;
-            }
-
-            .command {
-                font-weight: bold;
-            }
-            h1 {
-                text-align: center;
-                font-family: Arial, Helvetica, sans-serif;
-                font-size: 3em;
-                margin: 0;
-                padding: 20px 0;
-                font-weight: 300;
+            .alert {
+                margin: auto;
+                align-items: center;
             }
         </style>
     </head>
     <body>
         <div class="container">
-            <h1>Inteligencia Artificial a Tus Manos</h1>
-            <div class="chat-container" id="chatContainer">
-                <!-- Los mensajes del chat se añadirán aquí -->
+            <h1>Chat</h1>
+            {% with messages = get_flashed_messages(with_categories=false) %}
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            <div class="chat-container">
+                {% for conversation in conversations %}
+                    <div class="chat-message">
+                        <p><strong>User:</strong> {{ conversation.user_input }}</p>
+                        <p><strong>Chatbot:</strong> {{ conversation.chatbot_response }}</p>
+                    </div>
+                {% endfor %}
             </div>
             <div class="input-container">
-                <input type="text" id="messageInput" placeholder="Escribe un mensaje..." oninput="resizeInput(this)" onKeyDown="sendMessage(event)">
+                <input type="text" id="messageInput" placeholder="Escribe un mensaje...">
                 <button id="sendButton">Enviar</button>
             </div>
         </div>
+
         <script>
-            function resizeInput(input) {
-                input.style.height = 'auto';
-                input.style.height = input.scrollHeight + 'px';
+            function scrollToBottom() {
+                const chatContainer = document.querySelector('.chat-container');
+                chatContainer.scrollTop = chatContainer.scrollHeight;
             }
 
-            function sendMessage(event) {
-                if (event.keyCode === 13) { // Si se presiona Enter
-                    event.preventDefault(); // Evita que se inserte una nueva línea en el input
-                    var messageInput = document.getElementById('messageInput');
-                    var message = messageInput.value;
+            function addMessageToChat(role, content) {
+                const chatContainer = document.querySelector('.chat-container');
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'chat-message';
+                const roleTag = document.createElement('strong');
+                roleTag.textContent = role.charAt(0).toUpperCase() + role.slice(1);
+                const messageContent = document.createElement('p');
+                messageContent.innerHTML = `<strong>${roleTag.textContent}:</strong> ${content}`;
+                messageDiv.appendChild(messageContent);
+                chatContainer.appendChild(messageDiv);
+            }
 
-                    // Envía el mensaje al servidor o realiza alguna otra acción
-                    fetch('/chat', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            message: message
-                        })
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        var responseElement = document.createElement('div');
-                        responseElement.classList.add('chat-message', 'chat-response');
+            function postUserMessage(message) {
+                fetch('/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message: message,
+                    }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    addMessageToChat('chatbot', data.response);
+                    scrollToBottom();
+                })
+                .catch(error => console.error(error));
+            }
 
-                        // Divide la respuesta en párrafos
-                        var paragraphs = data.response.split('\n');
-                        paragraphs.forEach(function(paragraph) {
-                            var p = document.createElement('p');
-
-                            // Comprueba si el párrafo es un bloque de código
-                            if (paragraph.startsWith('```') && paragraph.endsWith('```')) {
-                                var pre = document.createElement('pre');
-                                var code = document.createElement('code');
-                                code.textContent = paragraph.slice(3, -3);  // Elimina las comillas triples
-
-                                var copyButton = document.createElement('button');
-                                copyButton.classList.add('copy-button');
-                                copyButton.textContent = 'Copiar';
-                                copyButton.addEventListener('click', function() {
-                                    navigator.clipboard.writeText(code.textContent);
-                                });
-
-                                pre.appendChild(code);
-                                pre.appendChild(copyButton);
-                                responseElement.appendChild(pre);
-                            } else {
-                                // Formatea los comandos envueltos en comillas simples
-                                var parts = paragraph.split(/'([^']*)'/g);
-                                for (var i = 0; i < parts.length; i++) {
-                                    if (i % 2 === 0) {
-                                        p.appendChild(document.createTextNode(parts[i]));
-                                    } else {
-                                        var command = document.createElement('span');
-                                        command.classList.add('command');
-                                        command.textContent = parts[i];
-                                        p.appendChild(command);
-                                    }
-                                }
-                                responseElement.appendChild(p);
-                            }
-                        });
-
-                        var chatContainer = document.getElementById('chatContainer');
-                        chatContainer.appendChild(responseElement);
-                        chatContainer.scrollTop = chatContainer.scrollHeight; // Desplaza automáticamente al último mensaje
-                    });
-
+            document.getElementById('sendButton').addEventListener('click', function() {
+                const messageInput = document.getElementById('messageInput');
+                const message = messageInput.value.trim();
+                if (message !== '') {
+                    addMessageToChat('user', message);
                     messageInput.value = '';
-                    resizeInput(messageInput); // Ajusta el tamaño del input después de limpiarlo
+                    scrollToBottom();
+                    postUserMessage(message);
                 }
-            }
+            });
+
+            document.getElementById('messageInput').addEventListener('keydown', function(event) {
+                if (event.keyCode === 13) {
+                    event.preventDefault();
+                    document.getElementById('sendButton').click();
+                }
+            });
+
+            scrollToBottom();
         </script>
     </body>
-    </html>
+</html>
